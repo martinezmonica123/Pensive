@@ -1,0 +1,7 @@
+.idea
+*.DS_Store
+ij_env/
+*.pyc
+post-images/
+db.sqlite3
+__pycache__/

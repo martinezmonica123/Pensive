@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Inspo Journal</title>
+
+    </head>
+    <body>
+        <form id="post_form" method="post" action=""
+              enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {% for hidden in postForm.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in postForm %}
+                {{ field }} <br />
+            {% endfor %}
+
+            {{ formset.management_form }}
+            {% for form in formset %}
+                {{ form }}
+            {% endfor %}
+
+
+            <button id="submit-all">Submit All</button>
+        </form>
+
+    </body>
+</html>
