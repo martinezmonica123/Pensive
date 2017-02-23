@@ -1,17 +1,17 @@
 from django import forms
-from .models import Post, Images
+from .models import *
 
 class PostForm(forms.ModelForm):
-    title = forms.CharField(max_length=128)
-    body = forms.CharField(max_length=245, label="Item Description.")
 
     class Meta:
         model = Post
-        fields = ('title', 'body', )
+        fields = ('title', 'body', 'tags' )
+        labels = {'title': 'Title', 'body': 'Body', 'tags': 'Tags'}
 
 
 class ImageForm(forms.ModelForm):
-    image = forms.ImageField(label='Image')
+
     class Meta:
-        model = Images
-        fields = ('image', )
+        model = Image
+        fields = ( 'image', 'tags' )
+        labels = { 'tags': 'Tags'}

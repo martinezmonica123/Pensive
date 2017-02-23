@@ -40,6 +40,11 @@ INSTALLED_APPS = [
 
     #my apps
     'blog',
+
+    #third party apps
+    'taggit',
+    #'bootstrap3',
+    #'django_markdown',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +130,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../../web/media').replace('\\','/')
+
+# Bootstrap3
+#BOOTSRAP3 = {'include_jquery': True}

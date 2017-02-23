@@ -5,3 +5,4 @@ ij_env/
 post-images/
 db.sqlite3
 __pycache__/
+migrations/
