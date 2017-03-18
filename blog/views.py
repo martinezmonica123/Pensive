@@ -1,59 +1,60 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.forms import modelformset_factory
-from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 #from django.contrib.auth.decorators import login_required
-
 
 from .forms import *
 
+
 # --------------- Main Views ---------------
+#TODO: def table_of_contents():
+#TODO: def post_detail():
 
 def index(request):
 	"""Project logs home page"""
 	return render(request, 'blog/index.html')
 
-#TODO: def table_of_contents():
-#TODO: def post_detail():
 
 # --------------- Post Views ---------------
+#TODO: def edit_post():
 
-#TODO: rename to add_post
-def post(request):
-	ImageFormSet = modelformset_factory(Image, form=ImageForm, extra=3)
+def post(request, slug):
+	post = get_object_or_404(Post, slug=slug)
+	images = post.image_set.order_by('-date_added')
+
+	#if project.owner != request.user:
+	#	raise Http404
+
+	context = {'post': post, 'images': images}
+	return render(request, 'blog/post.html', context)
+
+
+def new_post(request):
 
 	if request.method != 'POST':
 		postform = PostForm()
-		formset = ImageFormSet(queryset=Image.objects.none())
 
 	else:
 		postform = PostForm(request.POST)
-		formset = ImageFormSet(request.POST, request.FILES, queryset=Image.objects.none())
 
-		if postform.is_valid() and formset.is_valid():
-			photo = formset.save()
-			data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
-			post_form = postform.save(commit=False)
+		if postform.is_valid():
+			post_form = postform.save()
 			post_form.user = request.user
 			post_form.save()
+			return HttpResponseRedirect(reverse('blog:post', args=[post_form.slug]))
 
-			for form in formset.cleaned_data:
-				image = form['image']
-				photo = Image(post=post_form, image=image)
-				photo.save()
-			return HttpResponseRedirect(reverse('blog:index'))
+	context = {'postForm': postform}
+	return render(request, 'blog/new_post.html', context)
 
-	context = {'postForm': postform, 'formset': formset}
-	return render(request, 'blog/post.html', context)
-
-#TODO: def edit_post():
 
 # --------------- Image Views ---------------
+#TODO: def remove_images():
 
-def add_images(request, post_id, num):
-	ImageFormSet = modelformset_factory(Image, form=ImageForm, extra=num)
-	post = Post.objects.get(id=post_id)
+def add_images(request, slug):
+	ImageFormSet = modelformset_factory(Image, form=ImageForm, extra=1)
+	post = get_object_or_404(Post, slug=slug)
 
 	if request.method != 'POST':
 		formset = ImageFormSet(queryset=Image.objects.none())
@@ -65,9 +66,7 @@ def add_images(request, post_id, num):
 				photo = Image(image=image)
 				photo.post = post
 				photo.save()
-				return HttpResponseRedirect('blog:index', args=[post_id])
+				return HttpResponseRedirect(reverse('blog:post', args=[slug]))
 
 	context = {'post': post, 'formset': formset}
-	return render(request, 'blog/post.html', context)
-
-#TODO: def remove_images():
+	return render(request, 'blog/add_images.html', context)

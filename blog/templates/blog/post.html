@@ -8,7 +8,7 @@
             <div class="col-md-6 col-md-offset-4">
                 <div class="panel-heading">
                     <div class="row" style="padding:50px;">
-                        <h2> New Blog Post: </h2>
+                        <h2> {{ post.title }} </h2>
                     </div>
                 </div>
             </div>
@@ -16,42 +16,20 @@
 
         <div class="container">
             <div class="row">
-                <form id="post_form" method="post" action="" enctype="multipart/form-data">
-
-                    {% csrf_token %}
-
-                    <div class="col-sm-4 col-sm-offset-1" id="post-form">
-                        {% for field in postForm %}
-                            <h4>{{ field.label }}</h4> <br> {{ field }} <br>
+                <div class="col-md-4 col-md-offset-1" id="">
+                    <a href="{% url 'blog:add_images' post.slug %}">add images</a>
+                    <br><br>
+                    {% if images %}
+                        {% for image in images %}
+                            <img class="img-responsive" src=" {{ image.image.url }}">
                         {% endfor %}
-                    </div>
-                    <div class="col-sm-4 col-sm-offset-1" id="">
-                        <h4>Post Photos: </h4><br>
-                        {% for form in formset %}
-                            {{ form.image }} <br>
-                            {{ form.tags.label }} {{ form.tags }} <br><br><br>
-                        {% endfor %}
-                    </div>
-
-                </form>
-            </div>
-            <div class="row">
-                <div class="col-sm-6 col-sm-offset-3">
-                    <input class="btn btn-default" type="submit" name="submit" value="Submit" />
+                    {% endif %}
+                </div>
+                <div class="col-sm-4 col-sm-offset-1" id="">
+                    {{ post.body }}
                 </div>
             </div>
+            <br><br>
         </div>
-
     </div>
-    <script>
-    $(document).ready(function() {
-        $('.checked').click(function () {
-            if ($(this).is(':checked')) {
-                $("#images-form").show();
-            } else {
-                $("#images-form").hide();
-            }
-        });
-    });
-    </script>
 {% endblock %}
