@@ -9,8 +9,12 @@ from .forms import *
 
 
 # --------------- Main Views ---------------
-#TODO: def table_of_contents():
-#TODO: def post_detail():
+def contents(request):
+	posts = Post.objects.all().order_by('-date_added')
+	images = Image.objects.all().order_by('-date_added')
+	context = {'posts': posts, 'images': images}
+	return render(request, 'blog/posts.html', context)
+
 
 def index(request):
 	"""Project logs home page"""
