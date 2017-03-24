@@ -32,5 +32,10 @@ class ImageForm(forms.ModelForm):
 
     class Meta:
         model = Image
-        fields = ( 'image', 'tags' )
-        labels = { 'tags': 'Tags'}
+        fields = ( 'image', )
+        widgets = {
+            'text': forms.TextInput(
+                attrs={'id': 'id_image"', 'required': True, 'placeholder': 'Say something...'}
+            ),
+        }
+        #labels = { 'tags': 'Tags'}

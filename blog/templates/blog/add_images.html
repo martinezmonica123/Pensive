@@ -2,18 +2,21 @@
 {% load staticfiles %}
 
 {% block content %}
-    <div class="container-fluid">
-
+    <div class="container-fluid" style="padding:50px;">
+        <div class="row" style="text-align:right; margin-right: 4em;">
+            <h3>{{ post.title }}</h3>
+        </div>
         <div class="row">
             <div class="col-md-6 col-md-offset-4">
                 <div class="panel-heading">
-                    <div class="row" style="padding:50px;">
-                        <h1> New Blog Post: </h1>
+                    <div class="row" >
+                        <h1>Add Images to Post: </h1>
                     </div>
                 </div>
             </div>
         </div>
 
+        {% comment %}
         <div class="container">
             <form id="post_form" method="post" action="" enctype="multipart/form-data">
                 <div class="row">
@@ -34,5 +37,62 @@
                 </div>
             </form>
         </div>
+        {% endcomment %}
+
+        <div class="col-md-10 ">
+            <button type="button" class="btn btn-primary js-upload-photos">
+              <span class="glyphicon glyphicon-cloud-upload"></span> Upload photos
+            </button>
+        </div>
+
+        <br><br>
+        <div class="well text-muted text-center" style="padding-top: 4rem; padding-bottom: 4rem;">
+            <span class="glyphicon glyphicon-arrow-down" style="font-size: 4rem;"></span>
+            <h3>Drop Photos Here to Upload</h3>
+        </div>
+
+        <input id="fileupload" type="file" name="image" multiple
+               style="display: none;"
+               data-url="{% url 'blog:add_images' post.slug %}
+               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+        <br>
+
+        <div id="gallery" class="">
+            <h3>Current Photos</h3>
+            <br>
+            {% for image in images %}
+                <div class="col-md-2 col-sm-4">
+                    <a href= {% url 'blog:post' image.post.slug %}>
+                        <img class='img-thumbnail img-responsive' src= {{ image.image.url }}>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
     </div>
+
+    <div class="modal fade" id="modal-progress" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Uploading...</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+    {# JQUERY FILE UPLOAD SCRIPTS #}
+    <script src="{% static 'js/jquery-file-upload/vendor/jquery.ui.widget.js' %}"></script>
+    <script src="{% static 'js/jquery-file-upload/jquery.iframe-transport.js' %}"></script>
+    <script src="{% static 'js/jquery-file-upload/jquery.fileupload.js' %}"></script>
+
+    {# PHOTOS PAGE SCRIPTS #}
+    <script src="{% static 'js/basic-upload.js' %}"></script>
 {% endblock %}

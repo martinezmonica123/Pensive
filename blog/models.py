@@ -43,6 +43,6 @@ class Image(models.Model):
     post = models.ForeignKey(Post)
     date_added = models.DateTimeField(auto_now_add=True)
 
-    image = models.ImageField(upload_to=get_filename, verbose_name='Images')
-    tags = TaggableManager()
+    image = models.FileField(upload_to=get_filename, verbose_name='Images')
+    #tags = TaggableManager()
 
